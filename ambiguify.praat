@@ -24,6 +24,7 @@ finvot = named_vot / 1000
 ipercent = named_vow / 100
 
 ###iterate through files and open them
+printline word'tab$'vowdif'tab$'vowpercent'tab$'tvot'tab$'dvot'tab$'tvow'tab$'dvow
 writeFileLine: seam_file$, "word,time,value,seam,before_seam"
 Create Strings as file list... list 'input_directory$'/*.wav
 numberOfFiles = Get number of strings
@@ -73,7 +74,6 @@ for ifile to numberOfFiles
 			vowpercent = vowdif/tvow
 
 			printline 't_word$''tab$''vowdif''tab$''vowpercent''tab$''tvot''tab$''dvot''tab$''tvow''tab$''dvow'
-
 
 #######################################################################
 			###cutting vot
