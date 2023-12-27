@@ -57,5 +57,5 @@ The script will create an output folder with the files produced by the script.
 ## Output
 The output files will be in `ambiguify/output/`:
 - all of the ambiguified .wav files
-- a .tsv of information about the durations of the VOT and vowel for the voiced and voiceless production of each word
+- praat_output.tsv which includes information about the durations of the VOT and vowel for the voiced and voiceless production of each word (running repeatedly will append to this output file rather than replacing it, so delete it if you're starting over)
 
