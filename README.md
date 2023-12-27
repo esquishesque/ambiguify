@@ -54,8 +54,8 @@ Enter the command to run the script: `bash RUN_ambiguify.bash #1 #2 #3` but each
 
 The script will create an output folder with the files produced by the script.
 
-## Outcome
-The output files will be in `ambiguify/output/`.
-
-As the first Praat script runs, it will print out a tsv of information about the durations of the VOT and vowel for the voiced and voiceless production of each word.  This can be copied into a spreadsheet if desired.
+## Output
+The output files will be in `ambiguify/output/`:
+- all of the ambiguified .wav files
+- a .tsv of information about the durations of the VOT and vowel for the voiced and voiceless production of each word
 
