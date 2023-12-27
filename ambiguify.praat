@@ -18,13 +18,14 @@ input_directory$ = "input"
 output_directory$ = "temp_output"
 file_prefix$ = "amb-scale'named_scale'-vot'named_vot'-vow'named_vow'-"
 seam_file$ = "seam_measurements.csv"
+output_file$ = "praat_output.tsv"
 
 scaleFactor = named_scale / 100
 finvot = named_vot / 1000
 ipercent = named_vow / 100
 
 ###iterate through files and open them
-printline word'tab$'vowdif'tab$'vowpercent'tab$'tvot'tab$'dvot'tab$'tvow'tab$'dvow
+appendFileLine: output_file$, "word'tab$'vowdif'tab$'vowpercent'tab$'tvot'tab$'dvot'tab$'tvow'tab$'dvow"
 writeFileLine: seam_file$, "word,time,value,seam,before_seam"
 Create Strings as file list... list 'input_directory$'/*.wav
 numberOfFiles = Get number of strings
@@ -73,7 +74,7 @@ for ifile to numberOfFiles
 			vowdif = dvow-tvow
 			vowpercent = vowdif/tvow
 
-			printline 't_word$''tab$''vowdif''tab$''vowpercent''tab$''tvot''tab$''dvot''tab$''tvow''tab$''dvow'
+			appendFileLine: output_file$, "'t_word$''tab$''vowdif''tab$''vowpercent''tab$''tvot''tab$''dvot''tab$''tvow''tab$''dvow'"
 
 #######################################################################
 			###cutting vot
@@ -124,7 +125,7 @@ for ifile to numberOfFiles
 				v = Get value at time... 0 'time' Sinc70
 				isSeam = abs('time' - 'intermediatePoint') < 0.00002
 				beforeSeam = 'time' < 'intermediatePoint'
-				appendFileLine: seam_file$, "'file_prefix$''t_word$','time','v','isSeam','beforeSeam'"
+				appendFileLine: seam_file$, "'file_prefix$''t_word$','time','v','isSeam','beforeSeam'""
 				time = time + 0.000002
 			endfor
 

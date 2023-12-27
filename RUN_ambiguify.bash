@@ -7,12 +7,15 @@ vow=$3
 mkdir output
 mkdir temp_output
 
-#run ambiguify praat script
+#create output file and run ambiguify praat script
+touch output/praat_output.tsv
+mv output/praat_output.tsv ./
 /Applications/Praat.app/Contents/MacOS/Praat --run ambiguify.praat $scale $vot $vow
-
-#create output file for R script and run R script
-touch temp_output/tweak_times.txt
 mv seam_measurements.csv temp_output/
+mv praat_output.tsv output/
+
+#create output file and run R script
+touch temp_output/tweak_times.txt
 Rscript calculate_tweak.R
 
 #run final praat script
