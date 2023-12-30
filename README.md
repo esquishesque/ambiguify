@@ -59,3 +59,29 @@ The output files will be in `ambiguify/output/`:
 - all of the ambiguified .wav files
 - praat_output.tsv which includes information about the durations of the VOT and vowel for the voiced and voiceless production of each word (running repeatedly will append to this output file rather than replacing it, so delete it if you're starting over)
 
+# Precise description
+
+Here is exactly what the scripts do:
+- starting with the voiceless production file (all done within ambiguify.praat)
+  - apply the "Scale peak" function with a value of 0.99 (to make the sound as loud as possible; this does a fairly good job of making the portions from the two different words compatible in terms of volume)
+  - grab just the stop portion of the file: starting from 50ms before the start of the word, ending at the end of the aspiration (so from interval1-0.05 to interval2)
+  - cut aspiration from the right edge to result in the correct output VOT (argument #2; e.g. if 40 is the output VOT and the word has 73ms VOT, the rightmost 33ms will be removed)
+  - apply the "Scale intensity" function to the argument provided when the script was run (argument #1)
+ starting with the voiced production file (all done within ambiguify.praat)
+  - apply the "Scale peak" function with a value of 0.99 (to make the sound as loud as possible; this does a fairly good job of making the portions from the two different words compatible in terms of volume)
+  - grab the rest of the word after the stop: starting from the end of the aspiration, ending 50ms after the end of the word (so from interval2 to interval4+0.05)
+  - cut formant transitions from the left edge to result in the correct reduction in formant transitions (argument #3; e.g. if 40, if the d production has 150ms vowel length and the t production has 100ms vowel length, the script will cut 40% of the difference between 150 and 100, so the leftmost 20ms will be removed)
+- combine the files (done with both praat scripts and the R script)
+  - the goal here is to prevent any click or pop sound at the joint between the two files
+  - the process used here serves as an alternative to finding the nearest 0-crossing, which has flaws:
+    - sometimes the nearest 0-crossing is several ms or more away
+    - aspiration often has no 0-crossing at all
+    - if a waveform crossing 0 on its way down is combined with a waveform crossing 0 in its way up, there is often still a click or pop sound
+  - first, the ambiguify.praat script creates a series of measurements of the waveform every .002ms (.000002s) for the 2ms before and the 2ms after the desired joint point, in both the voiced sound file and the voiceless sound file, using Praat's "Get value at time" function
+  - these measurements are read by calculate_tweak.R, which finds the best point in each file to join the files
+    - it looks for places where 4 measurements in a row are heading in the same direction (upward or downward), labelling these areas stable upwards or stable downwards
+    - and then it finds the timestamps to cut each file that result in the least cutting while conforming to the following requirements:
+      - both files are in stable upwards or both are in stable downwards
+      - the transition from the end of the first file into the start of the next file will be >0 and <0.01 and in the correct direction (e.g. if in a stable upwards period, the value of the waveform in the second file must be >0 and <0.01 higher than the value of the waveform in the first file
+  - these timestamps are read by tweak.praat, which cuts the files accordingly
+    - it also sets the average intensity of the resulting file to 55dB SPL
