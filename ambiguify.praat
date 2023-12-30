@@ -125,7 +125,7 @@ for ifile to numberOfFiles
 				v = Get value at time... 0 'time' Sinc70
 				isSeam = abs('time' - 'intermediatePoint') < 0.00002
 				beforeSeam = 'time' < 'intermediatePoint'
-				appendFileLine: seam_file$, "'file_prefix$''t_word$','time','v','isSeam','beforeSeam'""
+				appendFileLine: seam_file$, "'file_prefix$''t_word$','time','v','isSeam','beforeSeam'"
 				time = time + 0.000002
 			endfor
 
